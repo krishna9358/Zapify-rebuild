@@ -52,6 +52,22 @@ CREATE TABLE "AvailableAction" (
 );
 
 -- CreateTable
+CREATE TABLE "ZapRun" (
+    "id" TEXT NOT NULL,
+    "zapId" TEXT NOT NULL,
+
+    CONSTRAINT "ZapRun_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ZapRunOutbox" (
+    "id" TEXT NOT NULL,
+    "zapRunId" TEXT NOT NULL,
+
+    CONSTRAINT "ZapRunOutbox_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_ActionToTrigger" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL
@@ -59,6 +75,9 @@ CREATE TABLE "_ActionToTrigger" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Trigger_zapId_key" ON "Trigger"("zapId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ZapRunOutbox_zapRunId_key" ON "ZapRunOutbox"("zapRunId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_ActionToTrigger_AB_unique" ON "_ActionToTrigger"("A", "B");
@@ -77,6 +96,12 @@ ALTER TABLE "Action" ADD CONSTRAINT "Action_zapId_fkey" FOREIGN KEY ("zapId") RE
 
 -- AddForeignKey
 ALTER TABLE "Action" ADD CONSTRAINT "Action_actionId_fkey" FOREIGN KEY ("actionId") REFERENCES "AvailableAction"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ZapRun" ADD CONSTRAINT "ZapRun_zapId_fkey" FOREIGN KEY ("zapId") REFERENCES "Zap"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ZapRunOutbox" ADD CONSTRAINT "ZapRunOutbox_zapRunId_fkey" FOREIGN KEY ("zapRunId") REFERENCES "ZapRun"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_ActionToTrigger" ADD CONSTRAINT "_ActionToTrigger_A_fkey" FOREIGN KEY ("A") REFERENCES "Action"("id") ON DELETE CASCADE ON UPDATE CASCADE;
