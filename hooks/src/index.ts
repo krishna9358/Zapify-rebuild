@@ -3,7 +3,7 @@ import express from "express";
 
 const client = new PrismaClient();
 const app = express();
-
+app.use(express.json())
 
 //password logic
 app.post("/hooks/catch/:userId/:zapId", async (req, res) => {
@@ -12,19 +12,21 @@ app.post("/hooks/catch/:userId/:zapId", async (req, res) => {
 
     // store a new trigeer in db 
     await client.$transaction(async tx => {
-        const run = await client.zapRun.create({
+        const run = await tx.zapRun.create({
             data: {
                 zapId
             }
         });
 
-        await client.zapRunOutbox.create({
+        await tx.zapRunOutbox.create({
             data:{
                 zapRunId : run.id
             }
-
         })
 
+    })
+    res.json({
+        message: "WebHook Recieved"
     })
 
 // push it on to queue(kafka/redis)
