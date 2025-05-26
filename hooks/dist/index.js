@@ -39,7 +39,6 @@ app.post("/hooks/catch/:userId/:zapId", (req, res) => __awaiter(void 0, void 0, 
     res.json({
         message: "Webhook received"
     });
-    // TODO: Put the trigger into the quere(redis/kafka)
 }));
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
