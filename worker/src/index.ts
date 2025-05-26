@@ -31,7 +31,7 @@ async function main() {
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // manually commit the offsets after processing the message
+      // manually commit the offsets after processing the message(acknowledgement)
       await consumer.commitOffsets([
         {
           topic: KAFKA_TOPIC,
