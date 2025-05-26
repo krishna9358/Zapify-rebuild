@@ -4,6 +4,7 @@ run the docker postgres, kafka
 `docker run -d --name zapify-kafka -p 9092:9092 apache/kafka:latest`
 `docker run -d --name zapify -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword postgres`
 CONST KAFKA_TOPIC="zap-events"
+change the .env for all the modules with same postgres url
 
 Hooks : 
 npm install 
@@ -23,7 +24,15 @@ npm run dev
 
 worker:
 npm run install
+npm prisma migrate dev
+npm prisma generate
 npm run dev 
+
+
+primary-backend:
+npm install
+
+
 
 
 
