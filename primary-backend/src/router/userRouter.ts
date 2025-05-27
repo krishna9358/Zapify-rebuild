@@ -1,12 +1,13 @@
 import { Router, Request, Response, RequestHandler } from "express";
 import { signinSchema, signupSchema } from "../types";
-import { PrismaClient } from "@prisma/client";
+
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config";
 import { authMiddleware } from "../middleware";
+import prismaClient from "../db/prismaClient";
 
 const userRouter = Router();
-const prismaClient = new PrismaClient();
+
 
 userRouter.post("/signup", (async (req: Request, res: Response) => {
     const body = req.body;
