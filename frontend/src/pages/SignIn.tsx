@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -7,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Link, useNavigate } from "react-router-dom";
 import { Zap, Mail, Lock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { BACKEND_URL } from "@/config";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -15,19 +15,49 @@ const SignIn = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("zapifyToken");
+    if (isLoggedIn) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate login
-    setTimeout(() => {
-      setIsLoading(false);
-      toast({
-        title: "Welcome back!",
-        description: "You have successfully signed in.",
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/v1/user/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password }),
       });
-      navigate("/dashboard");
-    }, 1000);
+      const data = await response.json();
+      console.log('Response:', response.status, data);
+      if (response.ok) {
+        toast({
+          title: "Successfully Logged in!",
+          description: "Welcome back! Let's build some workflows!",
+        });
+        navigate("/dashboard");
+        localStorage.setItem("zapifyToken", data.token);
+      } else {
+        toast({
+          title: "Error",
+          description: "Invalid email or password",
+        });
+      }
+    } catch (error) {
+      console.error('Signin error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to connect to the server",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

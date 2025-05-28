@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { 
   Zap, 
   Home, 
@@ -14,6 +14,7 @@ import {
   Bell,
   HelpCircle
 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -22,7 +23,8 @@ interface SidebarProps {
 
 export const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
   const location = useLocation();
-
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const menuItems = [
     { icon: Home, label: "Dashboard", path: "/dashboard" },
     { icon: Plus, label: "Create Workflow", path: "/create-workflow" },
@@ -33,6 +35,15 @@ export const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
     { icon: HelpCircle, label: "Help & Support", path: "/help" },
     { icon: User, label: "Profile", path: "/profile" },
   ];
+
+  const handleSignOut = () => {
+    localStorage.removeItem("zapifyToken");
+    navigate("/");
+    toast({
+      title: "Successfully Logged out!",
+      description: "See you next time!",
+    });
+  };
 
   return (
     <div className={`fixed left-0 top-0 h-full bg-card/95 backdrop-blur-xl border-r border-border/50 transition-all duration-300 z-50 ${
@@ -119,6 +130,7 @@ export const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
           <Button
             variant="ghost"
             className={`w-full justify-start hover:bg-red-500/20 text-red-400 ${!isOpen && 'px-3'}`}
+            onClick={handleSignOut}
           >
             <LogOut className={`w-4 h-4 ${isOpen ? 'mr-3' : ''} shrink-0`} />
             {isOpen && <span>Sign Out</span>}

@@ -1,10 +1,10 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Plus, Play, Pause, Settings, MoreHorizontal, Search, Filter, Zap, TrendingUp, Clock, Users, Eye } from "lucide-react";
 import { Sidebar } from "@/components/Sidebar";
 import { WorkflowConfigDrawer } from "@/components/WorkflowConfigDrawer";
@@ -15,6 +15,13 @@ const Dashboard = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerType, setDrawerType] = useState<'trigger' | 'action' | null>(null);
   const [selectedWorkflow, setSelectedWorkflow] = useState<string>("");
+  const navigate = useNavigate();
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("zapifyToken");
+    if (!isLoggedIn) {
+      navigate("/signin");
+    }
+  }, [navigate]);
 
   const workflows = [
     {

@@ -31,6 +31,13 @@ npm run dev
 
 primary-backend:
 npm install
+npx prisma migrate dev
+npx prisma generate
+
+
+frontend:
+npm install
+npm run dev
 
 
 
@@ -41,3 +48,4 @@ TIll now :
 1. Hooks can get hit from external source like github. The data will go to database ( zapRun, zapRunOutbox )
 3. Processsor will take the data from zapRunOUtbox and push to kafka queue and removing from zapRunOutbox. 
 4. Now, worker is taking events from kafka queue and processing it further. 
+5. Created the backend end points to create user and zap with available trigger and actions.

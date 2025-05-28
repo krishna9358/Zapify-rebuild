@@ -27,6 +27,9 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 
 const Home = () => {
+
+
+
   const stats = [
     { number: "500+", label: "Integrations", icon: Globe },
     { number: "99.9%", label: "Uptime", icon: Shield },
