@@ -19,7 +19,7 @@ zapRouter.post("/", authMiddleware, (async (req, res) => {
     });
   }
 
- const zap = await prismaClient.$transaction(async (tx) => {
+ const zap = await prismaClient.$transaction(async (tx:any) => {
     // create zap with blank trigger id ( one to one relation)
     const zap = await tx.zap.create({
       data: {
